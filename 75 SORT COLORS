@@ -1,0 +1,109 @@
+https://leetcode.com/problems/sort-colors/description/
+
+Approach: Dutch National Flag Algorithm (DNF)
+
+Maintain three pointers: low, mid, and high.
+low marks the boundary of sorted 0s.
+mid is the current element being processed.
+high marks the boundary of sorted 2s.
+If the current element is:
+0 → move it to the front.
+1 → leave it in place.
+2 → move it to the end.
+Continue until mid > high.
+
+Time Complexity: O(n)
+
+Space Complexity: O(1)
+
+
+class Solution {
+    public void sortColors(int[] nums) {
+
+        // Initialize pointers
+        int n = nums.length - 1;
+        int low = 0, mid = 0, high = n;
+
+        // Process elements until mid crosses high
+        while (mid <= high) {
+
+            // If current element is 0,
+            // place it at the beginning of the array
+            if (nums[mid] == 0) {
+
+                nums[mid] = nums[low];
+                nums[low] = 0;
+
+                // Expand the 0s region
+                low++;
+                mid++;
+            }
+
+            // If current element is 1,
+            // it is already in the correct region
+            else if (nums[mid] == 1) {
+                mid++;
+            }
+
+            // If current element is 2,
+            // place it at the end of the array
+            else {
+
+                nums[mid] = nums[high];
+                nums[high] = 2;
+
+                // Shrink the 2s region
+                high--;
+
+                // Do not increment mid because the
+                // new element at mid is still unprocessed
+            }
+        }
+    }
+}
+
+#original swap version
+class Solution {
+    public void sortColors(int[] nums) {
+
+        int low = 0;
+        int mid = 0;
+        int high = nums.length - 1;
+
+        while (mid <= high) {
+
+            // Current element is 0
+            if (nums[mid] == 0) {
+
+                // Swap nums[low] and nums[mid]
+                int temp = nums[low];
+                nums[low] = nums[mid];
+                nums[mid] = temp;
+
+                low++;
+                mid++;
+            }
+
+            // Current element is 1
+            else if (nums[mid] == 1) {
+
+                // Already in correct position
+                mid++;
+            }
+
+            // Current element is 2
+            else {
+
+                // Swap nums[mid] and nums[high]
+                int temp = nums[mid];
+                nums[mid] = nums[high];
+                nums[high] = temp;
+
+                high--;
+
+                // Don't increment mid because the new element
+                // at mid has not been processed yet.
+            }
+        }
+    }
+}
