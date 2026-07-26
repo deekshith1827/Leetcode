@@ -1,0 +1,45 @@
+https://leetcode.com/problems/container-with-most-water/description/
+
+Algorithm
+Place one pointer at the beginning.
+Place another at the end.
+Compute area.
+Update maximum.
+Move the shorter pointer.
+Repeat.
+
+class Solution {
+    public int maxArea(int[] height) {
+
+        // Initialize two pointers
+        int left = 0;
+        int right = height.length - 1;
+
+        // Stores the maximum area
+        int maxArea = 0;
+
+        while (left < right) {
+
+            // Width between the two lines
+            int width = right - left;
+
+            // Height is limited by the shorter line
+            int minHeight = Math.min(height[left], height[right]);
+
+            // Current area
+            int area = width * minHeight;
+
+            // Update maximum area
+            maxArea = Math.max(maxArea, area);
+
+            // Move the shorter line inward
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        return maxArea;
+    }
+}
