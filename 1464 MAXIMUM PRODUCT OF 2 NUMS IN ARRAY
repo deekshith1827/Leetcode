@@ -1,0 +1,53 @@
+https://leetcode.com/problems/maximum-product-of-two-elements-in-an-array/description/?envType=daily-question&envId=2026-07-27
+
+class Solution {
+    public int maxProduct(int[] nums) {
+
+        // Stores the maximum product found so far
+        int maxValue = 0;
+
+        // Check every possible pair in the array
+        for (int i = 0; i < nums.length; i++) {
+
+            for (int j = i + 1; j < nums.length; j++) {
+
+                // Calculate product after subtracting 1 from both elements
+                int product = (nums[i] - 1) * (nums[j] - 1);
+
+                // Update maximum product if current product is larger
+                maxValue = Math.max(maxValue, product);
+            }
+        }
+
+        return maxValue;
+    }
+}
+
+OPTIMAL
+class Solution {
+    public int maxProduct(int[] nums) {
+
+        // Stores the largest and second largest elements
+        int largest = 0;
+        int secondLargest = 0;
+
+        // Traverse the array only once
+        for (int num : nums) {
+
+            // If current number is the largest,
+            // shift previous largest to second largest
+            if (num > largest) {
+                secondLargest = largest;
+                largest = num;
+            }
+
+            // Otherwise, update second largest if needed
+            else if (num > secondLargest) {
+                secondLargest = num;
+            }
+        }
+
+        // Return the maximum product
+        return (largest - 1) * (secondLargest - 1);
+    }
+}
