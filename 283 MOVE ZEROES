@@ -1,0 +1,63 @@
+https://leetcode.com/problems/move-zeroes/
+
+
+class Solution {
+    public void moveZeroes(int[] nums) {
+
+        // left points to the position where the next non-zero element
+        // should be placed.
+        int left = 0;
+
+        // right traverses the entire array.
+        for (int right = 0; right < nums.length; right++) {
+
+            // Process only non-zero elements.
+            if (nums[right] != 0) {
+
+                // Swap the current non-zero element with the element at 'left'.
+                // If left == right, this becomes a self-swap, which is harmless.
+                int temp = nums[right];
+                nums[right] = nums[left];
+                nums[left] = temp;
+
+                // Move left to the next position for a future non-zero element.
+                left++;
+            }
+        }
+    }
+
+    /*
+Dry Run
+
+Input:
+nums = [0,1,0,3]
+
+Initial:
+left = 0
+
+right = 0
+nums[right] = 0
+Skip
+Array: [0,1,0,3]
+
+right = 1
+nums[right] = 1
+Swap nums[1] and nums[0]
+Array: [1,0,0,3]
+left = 1
+
+right = 2
+nums[right] = 0
+Skip
+Array: [1,0,0,3]
+
+right = 3
+nums[right] = 3
+Swap nums[3] and nums[1]
+Array: [1,3,0,0]
+left = 2
+
+Output:
+[1,3,0,0]
+*/
+}
