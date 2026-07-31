@@ -1,0 +1,124 @@
+https://leetcode.com/problems/trapping-rain-water/description/
+
+class Solution {
+    public int trap(int[] height) {
+
+        // Total number of bars
+        int n = height.length;
+
+        // Array to store the tallest bar from the left up to each index
+        int[] leftMax = new int[n];
+        leftMax[0] = height[0];
+
+        // Build the leftMax array
+        for (int i = 1; i < n; i++) {
+            leftMax[i] = Math.max(height[i], leftMax[i - 1]);
+        }
+
+        // Array to store the tallest bar from the right up to each index
+        int[] rightMax = new int[n];
+        rightMax[n - 1] = height[n - 1];
+
+        // Build the rightMax array
+        for (int i = n - 2; i >= 0; i--) {
+            rightMax[i] = Math.max(height[i], rightMax[i + 1]);
+        }
+
+        int trappedWater = 0;
+
+        // Calculate trapped water at every index
+        for (int i = 0; i < n; i++) {
+
+            // Water level is limited by the shorter of the two maximum walls
+            int waterLevel = Math.min(leftMax[i], rightMax[i]);
+
+            // Water stored at current index
+            trappedWater += waterLevel - height[i];
+        }
+
+        return trappedWater;
+    }
+}
+
+📝 Dry Run Example
+Input
+height = [2,0,2]
+Step 1: Build LeftMax
+Index      : 0  1  2
+Height     : 2  0  2
+LeftMax    : 2  2  2
+Step 2: Build RightMax
+Index      : 0  1  2
+Height     : 2  0  2
+RightMax   : 2  2  2
+Step 3: Calculate Trapped Water
+Index	Height	LeftMax	RightMax	Water Level	Water Stored
+0	2	2	2	2	0
+1	0	2	2	2	2
+2	2	2	2	2	0
+Total Trapped Water
+0 + 2 + 0 = 2
+
+Answer = 2
+
+📌 Time & Space Complexity
+Time Complexity  : O(n)
+Space Complexity : O(n)
+💡 Key Intuition
+Water can only be stored if there is a wall on both the left and right.
+For every index:
+Find the tallest wall on the left.
+Find the tallest wall on the right.
+The water level is limited by the shorter of these two walls.
+Formula:
+Water at index i =
+min(leftMax[i], rightMax[i]) - height[i]
+
+
+optimal 
+class Solution {
+    public int trap(int[] height) {
+
+        // Total number of bars
+        int n = height.length;
+
+        // Variable to store total trapped water
+        int totalWater = 0;
+
+        // Maximum height seen so far from left and right
+        int leftMax = 0;
+        int rightMax = 0;
+
+        // Two pointers
+        int start = 0;
+        int end = n - 1;
+
+        // Traverse until both pointers meet
+        while (start < end) {
+
+            // Update maximum heights from both sides
+            leftMax = Math.max(leftMax, height[start]);
+            rightMax = Math.max(rightMax, height[end]);
+
+            // Process the side with the smaller maximum wall
+            if (leftMax <= rightMax) {
+
+                // Water trapped at current left index
+                totalWater += leftMax - height[start];
+
+                // Move left pointer
+                start++;
+
+            } else {
+
+                // Water trapped at current right index
+                totalWater += rightMax - height[end];
+
+                // Move right pointer
+                end--;
+            }
+        }
+
+        return totalWater;
+    }
+}
