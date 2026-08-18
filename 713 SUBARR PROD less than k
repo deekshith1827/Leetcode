@@ -1,0 +1,75 @@
+https://leetcode.com/problems/subarray-product-less-than-k/description/
+
+
+### Simple Algorithm
+
+1. If `k <= 1`, return `0` because all numbers are positive.
+2. Use two pointers `left` and `right` to maintain a sliding window.
+3. Multiply the current element into `product`.
+4. If `product >= k`, keep removing elements from the left until the product becomes `< k`.
+5. Once the window is valid, add `right - left + 1` to `count`.
+6. Return `count`.
+
+### Dry Run
+
+For:
+
+```text
+nums = [3, 4, 2, 5]
+k = 50
+```
+
+| right | Added | Product | left | Valid window | New subarrays                 | count |
+| ----: | ----: | ------: | ---: | ------------ | ----------------------------- | ----: |
+|     0 |     3 |       3 |    0 | `[3]`        | `[3]` → 1                     |     1 |
+|     1 |     4 |      12 |    0 | `[3,4]`      | `[4]`, `[3,4]` → 2            |     3 |
+|     2 |     2 |      24 |    0 | `[3,4,2]`    | `[2]`, `[4,2]`, `[3,4,2]` → 3 |     6 |
+|     3 |     5 |     120 |    0 | Invalid      | —                             |     6 |
+|     3 |     — |      40 |    1 | `[4,2,5]`    | `[5]`, `[2,5]`, `[4,2,5]` → 3 | **9** |
+
+**Answer = 9**
+
+```java
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+
+        // If k <= 1, no positive product can be less than k
+        if (k <= 1) {
+            return 0;
+        }
+
+        int left = 0;
+        int product = 1;
+        int count = 0;
+
+        // Expand the sliding window using right pointer
+        for (int right = 0; right < nums.length; right++) {
+
+            // Include the current element in the window
+            product *= nums[right];
+
+            // If product becomes >= k, shrink the window
+            // from the left until the product becomes valid
+            while (product >= k) {
+                product /= nums[left];
+                left++;
+            }
+
+            // Number of valid subarrays ending at 'right'
+            // is the number of possible starting positions
+            count += right - left + 1;
+        }
+
+        return count;
+    }
+}
+```
+
+### Complexity
+
+* **Time:** `O(n)` — each element is added and removed from the window at most once.
+* **Space:** `O(1)`.
+
+One thing to remember for your GitHub notes:
+
+> **Expand → Shrink while invalid → Count `right - left + 1`.** 🔥
